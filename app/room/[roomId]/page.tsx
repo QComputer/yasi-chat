@@ -28,7 +28,14 @@ export default function ChatRoom() {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showGifPicker, setShowGifPicker] = useState(false);
   const [gifSearchQuery, setGifSearchQuery] = useState('');
-  const [gifResults, setGifResults] = useState<any[]>([]);
+  const [gifResults, setGifResults] = useState<Array<{
+    id: string;
+    media_formats: {
+      gif: { url: string };
+      tinygif: { url: string };
+    };
+    content_description: string;
+  }>>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -81,7 +88,7 @@ export default function ChatRoom() {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === `chat_room_${roomId}` && e.newValue) {
         const parsedMessages = JSON.parse(e.newValue);
-        const messagesWithDates = parsedMessages.map((msg: any) => ({
+        const messagesWithDates = parsedMessages.map((msg: Message) => ({
           ...msg,
           timestamp: new Date(msg.timestamp),
         }));
@@ -111,7 +118,7 @@ export default function ChatRoom() {
     const storedMessages = localStorage.getItem(storageKey);
     if (storedMessages) {
       const parsedMessages = JSON.parse(storedMessages);
-      const messagesWithDates = parsedMessages.map((msg: any) => ({
+      const messagesWithDates = parsedMessages.map((msg: Message) => ({
         ...msg,
         timestamp: new Date(msg.timestamp),
       }));

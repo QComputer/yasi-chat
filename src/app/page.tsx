@@ -23,7 +23,7 @@ export default function Home() {
     const newSocket = io('http://localhost:3001');
     setSocket(newSocket);
 
-    newSocket.on('message', (msg: any) => {
+    newSocket.on('message', (msg: Message) => {
       const receivedMessage: Message = {
         ...msg,
         timestamp: new Date(msg.timestamp),
